@@ -122,8 +122,8 @@
       position: absolute;
       top: 10px;
       right: 20px;
-      padding: 10px 20px;
-      font-size: 18px;
+      padding: 5px 15px; /* Diminui o tamanho do botão */
+      font-size: 14px; /* Diminui o tamanho da fonte */
       background-color: #00ffcc;
       color: #000;
       border: none;
@@ -152,8 +152,16 @@
     const senhaCorreta = "1234"; // Defina a senha aqui
     let isSenhaCorreta = false; // Variável para verificar se a senha foi corretamente inserida
     let mercadoAtual = "Bac Bo"; // Mercado inicial
-    const roletaOpcoes = ["4 e vizinhos", "9 e vizinhos", "10 e vizinhos", "12 e vizinhos"];
-    const footballStudioOpcoes = ["Entrada no Visitante", "Entrada na Casa"];
+    const roletaOpcoes = [
+      "🎰4 e seus vizinhos",
+      "🎰9 e seus vizinhos",
+      "🎰26 e seus vizinhos",
+      "🎰10 e seus vizinhos"
+    ];
+    const footballStudioOpcoes = [
+      "🔵VISITANTE - PROBABILIDADE SEM GALE🎯",
+      "🔴CASA - PROBABILIDADE SEM GALE🎯"
+    ];
     let sorteioAtual = "";
 
     // Função para verificar a senha
@@ -190,21 +198,21 @@
       setTimeout(() => {
         // Sorteio dependendo do mercado atual
         if (mercadoAtual === "Bac Bo") {
-          sorteioAtual = Math.random() < 0.5 ? 'azul' : 'vermelho';
+          sorteioAtual = Math.random() < 0.5 ? '🔵PLAYER - PROBABILIDADE SEM GALE🎯' : '🔴BANKER - PROBABILIDADE SEM GALE🎯';
         } else if (mercadoAtual === "Roleta") {
           sorteioAtual = roletaOpcoes[Math.floor(Math.random() * roletaOpcoes.length)];
         } else if (mercadoAtual === "Football Studio") {
           sorteioAtual = footballStudioOpcoes[Math.floor(Math.random() * footballStudioOpcoes.length)];
         }
 
-        // Exibe o resultado
-        resultadoDiv.textContent = `Resultado do sorteio: ${sorteioAtual}`;
+        // Exibe o resultado sem o prefixo "Resultado do sorteio:"
+        resultadoDiv.textContent = sorteioAtual;
         // Após mostrar o resultado, remove a animação de piscar
         resultadoDiv.classList.remove('buscando');
 
-        if (sorteioAtual === 'azul') {
+        if (sorteioAtual.includes("🔵") || sorteioAtual.includes("🔴")) {
           resultadoDiv.classList.add('azul');
-        } else if (sorteioAtual === 'vermelho') {
+        } else {
           resultadoDiv.classList.add('vermelho');
         }
       }, 2000); // Tempo de "buscando entrada"
