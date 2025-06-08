@@ -84,14 +84,23 @@
       transform: scale(1.2); /* Aumenta o tamanho ao passar o mouse */
     }
 
-    /* Estilo do iframe para exibir o site de apostas */
-    .apostas-container {
-      margin-top: 50px;
-      width: 100%;
-      height: 100vh; /* Aumenta a altura do iframe */
-      border: none;
-      border-top: 2px solid black; /* Borda fina na parte superior */
-    }
+.apostas-container {
+  margin-top: 50px;
+  width: 90%;  /* Define a largura do iframe */
+  height: 80vh; /* Define a altura do iframe */
+  border: 4px solid #000;  /* Borda preta mais grossa em torno do iframe */
+  border-radius: 10px; /* Bordas arredondadas */
+  margin-left: auto;
+  margin-right: auto; /* Centraliza o iframe */
+  overflow: hidden; /* Impede que o conteúdo dentro do iframe ultrapasse a área do iframe */
+}
+
+@media screen and (max-width: 768px) {
+  .apostas-container {
+    width: 90%; /* Ajusta a largura para telas menores */
+    height: 80vh; /* Ajusta a altura para telas menores */
+  }
+}
 
     /* Estilo dos retângulos */
     .retangulo {
@@ -128,8 +137,7 @@
     .botao-retangulo:active {
       transform: scale(0.95);
     }
-
-    /* Retângulo 1: Botão de Buscar Sinal */
+/* Retângulo 1: Botão de Buscar Sinal */
     #buscarSinalRetangulo {
       height: 40px; /* Retângulo superior com altura menor */
     }
@@ -246,14 +254,13 @@
     <div class="retangulo" id="jogoSelecionadoRetangulo">
       <div id="resultado" class="sinal-box">Jogo Selecionado</div>
     </div>
-
-    <!-- Exibindo o site da casa de apostas -->
+<!-- Exibindo o site da casa de apostas -->
     <iframe class="apostas-container" id="gameFrame" src="" title="Casa de Apostas Real's Bet" allowfullscreen></iframe>
     <button class="voltar-btn" onclick="voltarParaSelecao()">&#8592;</button>
   </div>
 
   <script>
-    const senhaCorreta = "1234"; // Defina a senha aqui
+    const senhaCorreta = "1755"; // Defina a senha aqui
     let isSenhaCorreta = false; // Variável para verificar se a senha foi corretamente inserida
     let mercadoAtual = "";
 
@@ -313,7 +320,7 @@
         if (mercadoAtual === "Bac Bo🎲") {
           sorteioAtual = Math.random() < 0.5 ? '🔵PLAYER SEM MARTINGALE' : '🔴BANKER SEM MARTINGALE';
         } else if (mercadoAtual === "Roleta🎰") {
-          sorteioAtual = 🎰 RACE ${Math.floor(Math.random() * 36)} E SEUS VIZINHOS;
+          sorteioAtual = `🎰 RACE ${Math.floor(Math.random() * 36)} E SEUS VIZINHOS`;
         } else if (mercadoAtual === "Football Studio🃏") {
           sorteioAtual = Math.random() < 0.5 ? '🔵VISITANTE SEM MARTINGALE' : '🔴CASA SEM MARTINGALE';
         }
@@ -321,6 +328,11 @@
         resultadoDiv.classList.remove('buscando');
         document.getElementById("jogoSelecionadoRetangulo").classList.remove('buscando-bg'); // Remove a cor de fundo amarela
         document.getElementById("jogoSelecionadoRetangulo").classList.remove('buscando-borda'); // Remove a borda amarela
+
+        // Mensagem "✅GREEN SEM GALE✅" após 32 segundos
+        setTimeout(() => {
+          resultadoDiv.textContent = "✅GREEN SEM GALE✅";
+        }, 32000); // 32 segundos
       }, 2000);
     }
 
