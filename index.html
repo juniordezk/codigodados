@@ -53,7 +53,7 @@
             text-shadow: none;
             position: absolute;
             top: 135px;
-            left: -30px; /* Colocando o resultado à esquerda */
+            left: 20px; /* Colocando o resultado à esquerda */
             background: none;
         }
 
@@ -91,6 +91,13 @@
             font-size: 1.2em;
             font-weight: bold;
             z-index: 3; /* Garante que o texto esteja acima da barra */
+        }
+
+        /* Media Query para dispositivos móveis */
+        @media (max-width: 768px) {
+            .result {
+                font-weight: lighter; /* Fonte mais fina no celular */
+            }
         }
 
     </style>
@@ -133,7 +140,7 @@
                     document.querySelector('.loading-bar').style.display = 'none';
 
                     // Gerar sorteio de "azul" ou "vermelho"
-                    const resultado = Math.random() < 0.5 ? 'Player' : 'Banker';
+                    const resultado = Math.random() < 0.5 ? 'Azul' : 'Vermelho';
 
                     // Gerar uma porcentagem entre 60% e 100% (dificuldade maior para números maiores)
                     let porcentagem = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
