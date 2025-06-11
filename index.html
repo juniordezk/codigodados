@@ -40,11 +40,12 @@
         .overlay img {
             width: 100px;
             cursor: pointer;
-            transition: transform 0.1s ease-in-out; /* Adiciona transição suave */
+            transition: transform 0.2s ease; /* Transição suave para a animação */
         }
 
+        /* Animação do botão ao ser clicado */
         .overlay img:active {
-            transform: scale(1.1); /* Aumenta a imagem quando clicada */
+            transform: scale(1.2); /* Aumenta a imagem ao clicar */
         }
 
         .result {
@@ -77,6 +78,7 @@
             left: 50%;
             transform: translateX(-50%);
             display: none;
+            z-index: 3; /* Garante que fique acima da tela escura */
         }
 
         .loading-progress {
@@ -86,7 +88,6 @@
             border-radius: 10px;
         }
 
-        /* Estilo para a frase "Hackeando" */
         .loading-text {
             position: absolute;
             top: 50%;
@@ -95,12 +96,27 @@
             color: white;
             font-size: 1.2em;
             font-weight: bold;
-            z-index: 3; /* Garante que o texto esteja acima da barra */
+            z-index: 4; /* Garante que o texto esteja acima da barra */
+        }
+
+        /* Tela escura */
+        .dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 50% de opacidade */
+            z-index: 1; /* Fica abaixo do conteúdo */
+            display: none; /* Inicialmente invisível */
         }
 
     </style>
 </head>
 <body>
+
+    <!-- Tela escura -->
+    <div class="dark-overlay" id="darkOverlay"></div>
 
     <!-- Iframe em tela cheia -->
     <iframe src="https://reals.bet.br/live-casino/game/1402430"></iframe>
@@ -125,8 +141,9 @@
             document.getElementById('resultadoTexto').innerText = '';
             document.getElementById('resultadoPorcentagem').innerText = '';
 
-            // Exibir a barra de carregamento e texto "Hackeando"
-            document.querySelector('.loading-bar').style.display = 'block';
+            // Exibir a tela escura, a barra de carregamento e o texto "Hackeando"
+            document.querySelector('.dark-overlay').style.display = 'block'; // Exibe a tela escura
+            document.querySelector('.loading-bar').style.display = 'block'; // Exibe a barra de carregamento
             let progressBar = document.getElementById('loadingProgress');
             let width = 0;
 
@@ -134,8 +151,11 @@
             let interval = setInterval(function() {
                 if (width >= 100) {
                     clearInterval(interval);
-                    // Após a barra de carregamento, esconder a barra
-                    document.querySelector('.loading-bar').style.display = 'none';// Gerar sorteio de "azul" ou "vermelho"
+                    // Após a barra de carregamento, esconder a barra e a tela escura
+                    document.querySelector('.loading-bar').style.display = 'none';
+                    document.querySelector('.dark-overlay').style.display = 'none'; // Esconde a tela escura
+
+                    // Gerar sorteio de "azul" ou "vermelho"
                     const resultado = Math.random() < 0.5 ? 'Player' : 'Banker';
 
                     // Gerar uma porcentagem entre 60% e 100% (dificuldade maior para números maiores)
