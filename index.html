@@ -40,6 +40,11 @@
         .overlay img {
             width: 100px;
             cursor: pointer;
+            transition: transform 0.1s ease-in-out; /* Adiciona transição suave */
+        }
+
+        .overlay img:active {
+            transform: scale(1.1); /* Aumenta a imagem quando clicada */
         }
 
         .result {
@@ -130,9 +135,7 @@
                 if (width >= 100) {
                     clearInterval(interval);
                     // Após a barra de carregamento, esconder a barra
-                    document.querySelector('.loading-bar').style.display = 'none';
-
-                    // Gerar sorteio de "azul" ou "vermelho"
+                    document.querySelector('.loading-bar').style.display = 'none';// Gerar sorteio de "azul" ou "vermelho"
                     const resultado = Math.random() < 0.5 ? 'Player' : 'Banker';
 
                     // Gerar uma porcentagem entre 60% e 100% (dificuldade maior para números maiores)
