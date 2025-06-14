@@ -61,15 +61,15 @@
         .button-container button {
             padding: 10px 20px;
             font-size: 18px;
-            background-color: #4CAF50;
+            background-color: #000000; /* Botões pretos */
             color: white;
-            border: none;
+            border: 1px solid white;
             border-radius: 5px;
             cursor: pointer;
         }
 
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #333333; /* Cor ao passar o mouse */
         }
 
         .result {
@@ -201,7 +201,7 @@
 
     <!-- Botões de seleção -->
     <div class="button-container" id="buttonContainer" style="display: none;">
-        <button onclick="startGame('CORES')">CORES</button>
+        <button onclick="startGame('CORES')">Sem Gale</button> <!-- Renomeado para "Sem Gale" -->
         <button onclick="startGame('EMPATE')">EMPATE</button>
     </div>
 
