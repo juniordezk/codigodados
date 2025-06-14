@@ -131,7 +131,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             z-index: 1;
-            display: none;
+            display: none; /* Inicialmente invisível */
         }
 
         /* Modal de senha */
@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <!-- Tela escura -->
+    <!-- Tela escura (para a tela de seleção de modo) -->
     <div class="dark-overlay" id="darkOverlay"></div>
 
     <!-- Botões de seleção -->
@@ -233,6 +233,7 @@
         if (password === correctPassword) {
             document.getElementById('passwordModal').style.display = 'none';
             document.getElementById('buttonContainer').style.display = 'flex';
+            document.getElementById('darkOverlay').style.display = 'block';  // Exibe a tela preta
             document.getElementById('betIframe').style.display = 'block'; // Exibe o iframe da casa de apostas
         } else {
             alert("Senha incorreta! Tente novamente.");
@@ -243,6 +244,7 @@
         gameMode = mode;
         document.getElementById('buttonContainer').style.display = 'none'; // Esconde os botões após seleção
         document.querySelector('.overlay').style.display = 'block';  // Exibe o sorteio
+        document.getElementById('darkOverlay').style.display = 'none';  // Esconde a tela preta
     }
 
     function sorteio() {
