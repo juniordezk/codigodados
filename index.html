@@ -11,10 +11,10 @@
             height: 100%;
             background-color: #000000;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif; /* Fonte mais fina */
             display: flex;
-            justify-content: flex-start;  /* Alinha à esquerda */
-            align-items: flex-start;  /* Alinha no topo */
+            justify-content: flex-start;
+            align-items: flex-start;
             padding-left: 20px;
             padding-top: 20px;
         }
@@ -27,6 +27,7 @@
             height: 100%;
             border: none;
             z-index: 0;
+            display: none; /* Inicialmente escondido */
         }
 
         .overlay {
@@ -34,18 +35,41 @@
             z-index: 1;
             color: white;
             text-align: left;
-            margin-left: -30px; /* Coloca a imagem mais à esquerda */
+            margin-left: -30px;
         }
 
         .overlay img {
             width: 100px;
             cursor: pointer;
-            transition: transform 0.2s ease; /* Transição suave para a animação */
+            transition: transform 0.2s ease;
         }
 
-        /* Animação do botão ao ser clicado */
         .overlay img:active {
-            transform: scale(1.2); /* Aumenta a imagem ao clicar */
+            transform: scale(1.2);
+        }
+
+        .button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 20px;
+            z-index: 2;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
         }
 
         .result {
@@ -59,7 +83,7 @@
             text-shadow: none;
             position: absolute;
             top: 65px;
-            left: -20px; /* Colocando o resultado à esquerda */
+            left: -20px;
             background: none;
         }
 
@@ -74,11 +98,11 @@
             border-radius: 10px;
             margin-top: 15px;
             position: absolute;
-            top: 50%;  /* Coloca a barra no meio verticalmente */
+            top: 50%;
             left: 50%;
             transform: translateX(-50%);
             display: none;
-            z-index: 3; /* Garante que fique acima da tela escura */
+            z-index: 3;
         }
 
         .loading-progress {
@@ -96,32 +120,92 @@
             color: white;
             font-size: 1.2em;
             font-weight: bold;
-            z-index: 4; /* Garante que o texto esteja acima da barra */
+            z-index: 4;
         }
 
-        /* Tela escura */
         .dark-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* 80% de opacidade */
-            z-index: 1; /* Fica abaixo do conteúdo */
-            display: none; /* Inicialmente invisível */
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1;
+            display: none;
         }
 
+        /* Modal de senha */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .password-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .password-container img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .password-container input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        .password-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .password-container button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Modal de senha -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-container">
+            <img src="https://i.imgur.com/zmvnMum.jpeg" alt="Tela de Bloqueio">
+            <h2>Digite a senha para acessar</h2>
+            <input type="password" id="passwordInput" placeholder="Senha">
+            <button onclick="checkPassword()">Acessar</button>
+        </div>
+    </div>
+
     <!-- Tela escura -->
     <div class="dark-overlay" id="darkOverlay"></div>
 
-    <!-- Iframe em tela cheia -->
-    <iframe src="https://reals.bet.br/live-casino/game/1402430"></iframe>
+    <!-- Botões de seleção -->
+    <div class="button-container" id="buttonContainer" style="display: none;">
+        <button onclick="startGame('CORES')">CORES</button>
+        <button onclick="startGame('EMPATE')">EMPATE</button>
+    </div>
 
-    <!-- Botão de sorteio e resultado -->
+    <!-- Resultado -->
     <div class="overlay">
         <img src="https://i.imgur.com/vNPztgK.png" alt="Botão de Sorteio" onclick="sorteio()">
         <div class="result" id="resultado">
@@ -132,52 +216,84 @@
     <!-- Barra de carregamento -->
     <div class="loading-bar">
         <div class="loading-progress" id="loadingProgress"></div>
-        <div class="loading-text">Hackeando...</div> <!-- Frase "Hackeando" na barra -->
+        <div class="loading-text">Hackeando...</div>
     </div>
 
-    <script>
-        function sorteio() {
-            // Esconder o resultado anterior
-            document.getElementById('resultadoTexto').innerText = '';
-            document.getElementById('resultadoPorcentagem').innerText = '';
+    <!-- Casa de aposta - iframe -->
+    <iframe src="https://reals.bet.br/live-casino/game/1402430" id="betIframe"></iframe>
 
-            // Exibir a tela escura, a barra de carregamento e o texto "Hackeando"
-            document.querySelector('.dark-overlay').style.display = 'block'; // Exibe a tela escura
-            document.querySelector('.loading-bar').style.display = 'block'; // Exibe a barra de carregamento
-            let progressBar = document.getElementById('loadingProgress');
-            let width = 0;
+<script>
+    const correctPassword = "2582";
+    let gameMode = "";  // Variável para armazenar o modo de jogo ("CORES" ou "EMPATE")
+    let resultTimer;
 
-            // Aumentar a barra de carregamento de 0% a 100% em 4 segundos
-            let interval = setInterval(function() {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    // Após a barra de carregamento, esconder a barra e a tela escura
-                    document.querySelector('.loading-bar').style.display = 'none';
-                    document.querySelector('.dark-overlay').style.display = 'none'; // Esconde a tela escura
+    function checkPassword() {
+        const password = document.getElementById('passwordInput').value;
 
-                    // Gerar sorteio de "azul" ou "vermelho"
-                    const resultado = Math.random() < 0.5 ? 'Player' : 'Banker';
-
-                    // Gerar uma porcentagem entre 60% e 100% (dificuldade maior para números maiores)
-                    let porcentagem = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
-
-                    // Exibir o resultado do sorteio com a porcentagem
-                    document.getElementById('resultadoTexto').innerText = resultado;
-                    document.getElementById('resultadoPorcentagem').innerText = `${porcentagem}%`;
-
-                    // Esconder o resultado após 29 segundos
-                    setTimeout(function() {
-                        document.getElementById('resultadoTexto').innerText = '';
-                        document.getElementById('resultadoPorcentagem').innerText = '';
-                    }, 29000); // Resultado desaparece após 29 segundos
-
-                } else {
-                    width++;
-                    progressBar.style.width = width + '%'; // Atualiza a barra de progresso
-                }
-            }, 40); // A cada 40ms a barra de carregamento aumenta 1%
+        if (password === correctPassword) {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('buttonContainer').style.display = 'flex';
+            document.getElementById('betIframe').style.display = 'block'; // Exibe o iframe da casa de apostas
+        } else {
+            alert("Senha incorreta! Tente novamente.");
         }
-    </script>
+    }
+
+    function startGame(mode) {
+        gameMode = mode;
+        document.getElementById('buttonContainer').style.display = 'none'; // Esconde os botões após seleção
+        document.querySelector('.overlay').style.display = 'block';  // Exibe o sorteio
+    }
+
+    function sorteio() {
+        document.getElementById('resultadoTexto').innerText = '';
+        document.getElementById('resultadoPorcentagem').innerText = '';
+
+        document.querySelector('.dark-overlay').style.display = 'block';
+        document.querySelector('.loading-bar').style.display = 'block';
+        let progressBar = document.getElementById('loadingProgress');
+        let width = 0;
+
+        let interval = setInterval(function() {
+            if (width >= 100) {
+                clearInterval(interval);
+                document.querySelector('.loading-bar').style.display = 'none';
+                document.querySelector('.dark-overlay').style.display = 'none';
+
+                let percentage;
+                // Página de "CORES": Percentagem de 60% a 100% (sem valores abaixo de 60%)
+                if (gameMode === "CORES") {
+                    percentage = Math.floor(Math.random() * (100 - 60 + 1)) + 60;  // 60% a 100%
+                }
+                // Página de "EMPATE": Percentagem de 10% a 100% com maior chance de valores abaixo de 50%
+                else if (gameMode === "EMPATE") {
+                    if (Math.random() < 0.9) {  // 90% das vezes abaixo de 50%
+                        percentage = Math.floor(Math.random() * (50 - 10 + 1)) + 10;  // 10% a 50%
+                    } else {  // 10% das vezes acima de 50%
+                        percentage = Math.floor(Math.random() * (100 - 51 + 1)) + 51;  // 51% a 100%
+                    }
+                }
+
+                const result = gameMode === "EMPATE" ? "TIE" : (Math.random() < 0.5 ? "Player" : "Banker");
+
+                document.getElementById('resultadoTexto').innerText = result;
+                document.getElementById('resultadoPorcentagem').innerText = `${percentage}%`;
+
+                // Definir tempo do resultado conforme o modo
+                let timeoutDuration = gameMode === "CORES" ? 29000 : 240000;  // 29 segundos para CORES e 4 minutos para EMPATE
+
+                // Timer para esconder o resultado
+                resultTimer = setTimeout(function() {
+                    document.getElementById('resultadoTexto').innerText = '';
+                    document.getElementById('resultadoPorcentagem').innerText = '';
+                }, timeoutDuration);
+            } else {
+                width++;
+                progressBar.style.width = width + '%';
+            }
+        }, 40);
+    }
+</script>
 
 </body>
 </html>
