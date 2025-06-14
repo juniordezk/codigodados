@@ -276,7 +276,7 @@
                     }
                 }
 
-                const result = gameMode === "EMPATE" ? "TIE" : (Math.random() < 0.5 ? "Player" : "Banker");
+                const result = gameMode === "EMPATE" ? "Empate" : (Math.random() < 0.5 ? "Player" : "Banker");
 
                 document.getElementById('resultadoTexto').innerText = result;
                 document.getElementById('resultadoPorcentagem').innerText = `${percentage}%`;
